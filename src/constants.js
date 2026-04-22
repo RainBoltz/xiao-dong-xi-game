@@ -9,7 +9,7 @@ export const WRONG_CLICK_COOLDOWN = 1500;
 export const CHASE_CLICK_COOLDOWN = 500;
 
 // 追逐期需要命中幾次才能過關
-export const REQUIRED_HITS = 3;
+export const REQUIRED_HITS = 5;
 
 // 整場遊戲的總倒數秒數（失敗判定）
 export const GAME_DURATION = 15;
