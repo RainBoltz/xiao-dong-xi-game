@@ -43,3 +43,39 @@ export const ASSETS = {
   // 👉 替換為你的個人照片（建議正方形、透明背景或圓形裁切）
   LITTLE_THING: 'https://api.dicebear.com/9.x/fun-emoji/svg?seed=xiaodongxi&backgroundColor=ffdfbf',
 };
+
+// 新增：關卡總數
+export const TOTAL_LEVELS = 3;
+
+// 新增：每關難度設定（index 0 = Level 1）
+// Level 1 的值刻意與檔案上方的單值常量（WRONG_CLICK_COOLDOWN 等）保持一致 —
+// 舊呼叫端先沿用單值常量，新流程改讀 LEVELS[levelIndex]。
+export const LEVELS = [
+  {
+    id: 1, label: '關卡 1 · 暖身',
+    duration: 15, requiredHits: 3,
+    chaseAutoMoveInterval: 900, chaseClickCooldown: 500,
+    wrongClickCooldown: 1500,
+    sizeSearch: 44, sizeChase: 72,
+    decoyCount: 0, decoyAutoMove: false,
+    decoyPenaltyMs: 0,
+  },
+  {
+    id: 2, label: '關卡 2 · 真假難辨',
+    duration: 13, requiredHits: 4,
+    chaseAutoMoveInterval: 700, chaseClickCooldown: 600,
+    wrongClickCooldown: 1800,
+    sizeSearch: 40, sizeChase: 64,
+    decoyCount: 1, decoyAutoMove: false,
+    decoyPenaltyMs: 1200,
+  },
+  {
+    id: 3, label: '關卡 3 · 群魔亂舞',
+    duration: 11, requiredHits: 5,
+    chaseAutoMoveInterval: 550, chaseClickCooldown: 700,
+    wrongClickCooldown: 2200,
+    sizeSearch: 36, sizeChase: 56,
+    decoyCount: 2, decoyAutoMove: true,
+    decoyPenaltyMs: 1500,
+  },
+];
