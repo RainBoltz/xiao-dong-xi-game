@@ -15,8 +15,10 @@ import {
  * @param {{ x: number, y: number }} props.position 當前像素座標
  * @param {boolean} props.clickable  是否可點擊（追逐期冷卻中會變 false）
  * @param {() => void} props.onHit   點中時的回呼
+ * @param {boolean} [props.cloaked]  追逐期短暫隱形（透明度大幅降低，但仍可盲點命中）
+ * @param {boolean} [props.swappedRing] 與誘餌互換光環樣式（真目標套上誘餌的弱光環）
  */
-export default function LittleThing({ phase, position, clickable, onHit }) {
+export default function LittleThing({ phase, position, clickable, onHit, cloaked = false, swappedRing = false }) {
   const isChasing = phase === 'chasing';
   const size = isChasing ? LITTLE_THING_SIZE_CHASE : LITTLE_THING_SIZE_SEARCH;
 
@@ -44,7 +46,7 @@ export default function LittleThing({ phase, position, clickable, onHit }) {
       animate={{
         x: position.x,
         y: position.y,
-        opacity: clickable ? 1 : 0.35,
+        opacity: (clickable ? 1 : 0.35) * (cloaked ? 0.15 : 1),
         scale: isChasing ? [1, 1.08, 1] : 1,
       }}
       transition={{
@@ -60,7 +62,7 @@ export default function LittleThing({ phase, position, clickable, onHit }) {
           damping: isChasing ? 18 : 30,
           duration: CHASE_MOVE_DURATION,
         },
-        opacity: { duration: 0.2 },
+        opacity: { duration: 0.12 },
         scale: {
           duration: 0.8,
           repeat: isChasing ? Infinity : 0,
@@ -72,7 +74,9 @@ export default function LittleThing({ phase, position, clickable, onHit }) {
       <div
         className={`relative h-full w-full overflow-hidden rounded-full ring-2 ${
           isChasing
-            ? 'ring-yellow-300 shadow-[0_0_20px_rgba(253,224,71,0.8)]'
+            ? (swappedRing
+                ? 'ring-yellow-300/40'
+                : 'ring-yellow-300 shadow-[0_0_20px_rgba(253,224,71,0.8)]')
             : 'ring-white/40'
         }`}
         style={{
