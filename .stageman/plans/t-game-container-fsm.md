@@ -1,0 +1,1 @@
+Plan ready for review at `/Users/rainboltz/.claude/plans/plan-task-extend-gamecontainer-jsx-spicy-harbor.md`. Approve to proceed, or push back on any of the calls I flagged (PRD vs. task-brief field names, the inline decoy-positioning loop, or the Level-3 hit-decrement gating).
