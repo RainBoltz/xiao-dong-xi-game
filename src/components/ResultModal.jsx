@@ -52,11 +52,11 @@ export default function ResultModal({ open, result, onRestart }) {
             </div>
 
             <h2 className="mb-2 text-2xl font-extrabold tracking-wide">
-              {isWin ? '抓到我啦！' : '小東西跑掉了…'}
+              {isWin ? '全破！' : '小東西跑掉了…'}
             </h2>
             <p className="mb-6 text-base leading-relaxed">
               {isWin
-                ? '週末請妳吃壽司大餐！🍣'
+                ? '5 關全破！週末請妳吃壽司大餐 + 飯後甜點 🍣🍮'
                 : '這次讓它溜走了，再挑戰一次吧！'}
             </p>
 
