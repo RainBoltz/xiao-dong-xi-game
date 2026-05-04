@@ -32,6 +32,7 @@ export const GAME_PHASE = {
   IDLE: 'idle',
   SEARCHING: 'searching',
   CHASING: 'chasing',
+  LEVEL_TRANSITION: 'level_transition',
   WIN: 'win',
   LOSE: 'lose',
 };
