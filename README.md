@@ -26,7 +26,8 @@ src/
 ├── App.jsx                 # 根容器（手機框）
 ├── main.jsx                # React 入口
 ├── index.css               # 全域樣式 + Tailwind 指令
-├── constants.js            # 遊戲難度常量（方便微調）
+├── constants.js            # 全域常量（階段、資產、共用邊距）
+├── levels.js               # 每關獨立難度設定
 ├── utils/
 │   └── random.js           # 隨機座標工具
 └── components/
@@ -49,19 +50,38 @@ src/
 
 ### 微調難度
 
-同樣在 `src/constants.js`：
+#### 每關獨立的難度旋鈕（`src/levels.js`）
 
-| 常量 | 說明 |
+每關 (`L1` / `L2` / `L3`) 各自一組欄位，調整單一關卡只需改對應 key，不會影響其它關。
+
+| 欄位 | 說明 |
 | --- | --- |
-| `WRONG_CLICK_COOLDOWN` | 點錯背景的冷卻時間（ms） |
-| `CHASE_CLICK_COOLDOWN` | 追逐期每次點擊後的短冷卻（ms） |
-| `REQUIRED_HITS` | 追逐期需命中幾次才過關 |
-| `GAME_DURATION` | 整場倒數秒數 |
-| `CHASE_AUTO_MOVE_INTERVAL` | 追逐期自動逃竄頻率（ms） |
-| `LITTLE_THING_SIZE_SEARCH` / `LITTLE_THING_SIZE_CHASE` | 兩階段尺寸 |
+| `duration` | 該關倒數秒數 |
+| `requiredHits` | 該關需命中真目標的次數 |
+| `wrongClickCooldown` | 點錯背景的冷卻時間（ms） |
+| `chaseClickCooldown` | 追逐每次點擊後的短冷卻（ms） |
+| `chaseAutoMoveInterval` | 追逐期自動逃竄頻率（ms） |
+| `sizeSearch` / `sizeChase` | 搜尋期 / 追逐期小東西尺寸（px） |
+| `decoyCount` | 假目標（decoy）數量；L1 為 0、L2/L3 才會出現 |
+| `decoyAutoMove` | 假目標是否會自動位移 |
+| `decoyPenaltyMs` | 點到假目標時觸發的懲罰冷卻（ms） |
+
+> ℹ️ `src/levels.js` 是把每關旋鈕從 `src/constants.js` 拆出來的新檔案；若你 pull 下來的版本仍把 `LEVELS` 放在 `constants.js`，請以該檔案的實際 export 為準。
+
+#### 全域常量（`src/constants.js`）
+
+下列設定跨關共用，住在 `src/constants.js`：
+
+- `SAFE_MARGIN`：所有關卡共用的安全邊距比例（避免小東西貼邊）。
+- `GAME_PHASE`：階段列舉（`idle` / `level_transition` / `playing` / `win` / `lose`），跨關共用。
+- `ASSETS`：背景與小東西圖檔，整個遊戲共用（見上方「替換圖片」）。
+- `CHASE_MOVE_DURATION`：移動動畫長度，所有關卡共用視覺手感。
 
 ## 遊戲流程
 
-1. **搜尋期**：背景清晰，小東西隱藏（半透明 + 較小）。點中背景會觸發 1.5 秒紅色冷卻條。
-2. **追逐期**：背景模糊，小東西放大顯眼並隨機逃竄。頂部顯示血量條，每次點擊後有 0.5 秒冷卻（半透明不可點）。
-3. **結局**：命中 5 次 → 彩帶 + 「抓到我啦！週末請妳吃壽司大餐！」；倒數歸零 → 失敗 Modal 可重玩。
+1. **L1 初次相遇**：背景清晰，小東西半透明且尺寸較小。點中背景觸發 1.5 秒紅色冷卻條；命中目標即進入下一關。
+2. **L2 它變狡猾了**：背景開始模糊，小東西放大並隨機逃竄；同時出現會干擾視線的「假目標」（decoy），點到假目標一樣會觸發冷卻。
+3. **L3 最後一搏**：難度上限──移動更快、假目標更多，命中需求最高，限時內擊中真正的小東西即勝利。
+
+- **關卡切換**：每兩關之間會插入 `LEVEL_TRANSITION` 中場卡，提示玩家接下來的難度與規則變化。
+- **失敗判定**：任何一關時間歸零或血量耗盡都會回到 L1 重新開始（不接續關卡）。
