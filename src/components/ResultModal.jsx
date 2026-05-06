@@ -8,9 +8,10 @@ import { PartyPopper, RotateCcw, Heart, Frown } from 'lucide-react';
  * @param {object} props
  * @param {boolean} props.open
  * @param {'win'|'lose'} props.result
+ * @param {boolean} [props.clearedFinalLevel]  是否通關最後一關（決定勝利文案）
  * @param {() => void} props.onRestart
  */
-export default function ResultModal({ open, result, onRestart }) {
+export default function ResultModal({ open, result, clearedFinalLevel = false, onRestart }) {
   const isWin = result === 'win';
 
   return (
@@ -56,7 +57,9 @@ export default function ResultModal({ open, result, onRestart }) {
             </h2>
             <p className="mb-6 text-base leading-relaxed">
               {isWin
-                ? '週末請妳吃壽司大餐！🍣'
+                ? clearedFinalLevel
+                  ? '週末請妳吃壽司大餐！🍣'
+                  : '下次再來挑戰！'
                 : '這次讓它溜走了，再挑戰一次吧！'}
             </p>
 
