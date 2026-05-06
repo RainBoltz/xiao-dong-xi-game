@@ -15,8 +15,9 @@ import {
  * @param {{ x: number, y: number }} props.position 當前像素座標
  * @param {boolean} props.clickable  是否可點擊（追逐期冷卻中會變 false）
  * @param {() => void} props.onHit   點中時的回呼
+ * @param {boolean} [props.isDecoy=false]  decoy 模式：使用中性白色描邊，無黃光暈
  */
-export default function LittleThing({ phase, position, clickable, onHit }) {
+export default function LittleThing({ phase, position, clickable, onHit, isDecoy = false }) {
   const isChasing = phase === 'chasing';
   const size = isChasing ? LITTLE_THING_SIZE_CHASE : LITTLE_THING_SIZE_SEARCH;
 
@@ -72,7 +73,9 @@ export default function LittleThing({ phase, position, clickable, onHit }) {
       <div
         className={`relative h-full w-full overflow-hidden rounded-full ring-2 ${
           isChasing
-            ? 'ring-yellow-300 shadow-[0_0_20px_rgba(253,224,71,0.8)]'
+            ? (isDecoy
+                ? 'ring-white/30'
+                : 'ring-yellow-300 shadow-[0_0_20px_rgba(253,224,71,0.8)]')
             : 'ring-white/40'
         }`}
         style={{
